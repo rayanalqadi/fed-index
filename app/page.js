@@ -87,6 +87,21 @@ export default async function Home() {
               <br />
               نموذج تجريبي لأغراض التعلم — ليس نصيحة استثمارية.
             </div>
+
+            <a
+              href="/how-it-works"
+              style={{
+                display: "inline-block",
+                marginTop: "1.6rem",
+                fontSize: 13,
+                color: "#B8974D",
+                textDecoration: "none",
+                borderBottom: "1px solid #B8974D",
+                paddingBottom: 2,
+              }}
+            >
+              كيف نحسب هذا التوقع؟ ←
+            </a>
           </>
         ) : (
           <div style={{ fontSize: 20, color: "#9AA3B2" }}>
