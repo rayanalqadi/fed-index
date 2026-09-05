@@ -1,4 +1,4 @@
-import { kv } from "@vercel/kv";
+import { kvGet } from "../lib/redis";
 
 const LABELS = {
   hold: "يُبقي على سعر الفائدة دون تغيير",
@@ -15,7 +15,7 @@ function formatArabicDate(iso) {
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const data = await kv.get("fed_index:latest");
+  const data = await kvGet("fed_index:latest");
 
   const decisionText = data ? LABELS[data.decision] : null;
   const meetingDate = data ? formatArabicDate(data.meetingDate) : null;

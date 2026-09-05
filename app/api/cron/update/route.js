@@ -1,4 +1,4 @@
-import { kv } from "@vercel/kv";
+import { kvGet, kvSet } from "../../../../lib/redis";
 import { fetchAllSeries, latestObservationDate } from "../../../../lib/fred";
 import { forecastNextMeeting } from "../../../../lib/predictor";
 
@@ -26,7 +26,7 @@ export async function GET(request) {
     const seriesData = await fetchAllSeries(apiKey);
     const newLatestDate = latestObservationDate(seriesData);
 
-    const stored = await kv.get("fed_index:latest");
+    const stored = await kvGet("fed_index:latest");
     const previousLatestDate = stored?.dataAsOf || null;
 
     // لو ما فيه بيانات أحدث من المخزّنة، ما نعيد الحساب (توفير)
@@ -40,7 +40,7 @@ export async function GET(request) {
       dataAsOf: newLatestDate,
     };
 
-    await kv.set("fed_index:latest", result);
+    await kvSet("fed_index:latest", result);
 
     return Response.json({ updated: true, result });
   } catch (err) {
