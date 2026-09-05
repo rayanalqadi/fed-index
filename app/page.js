@@ -1,4 +1,7 @@
-import { kvGet } from "../lib/redis";
+import { kvGet, kvIncr } from "../lib/redis";
+import LiveClock from "./LiveClock";
+import Countdown from "./Countdown";
+import Gauge from "./Gauge";
 
 const LABELS = {
   hold: "يُبقي على سعر الفائدة دون تغيير",
@@ -12,10 +15,18 @@ function formatArabicDate(iso) {
   return d.toLocaleDateString("ar-SA", { year: "numeric", month: "long", day: "numeric" });
 }
 
+function formatVisits(n) {
+  if (n == null) return "—";
+  return n.toLocaleString("ar-SA");
+}
+
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const data = await kvGet("fed_index:latest");
+  const [data, visits] = await Promise.all([
+    kvGet("fed_index:latest"),
+    kvIncr("fed_index:visits"),
+  ]);
 
   const decisionText = data ? LABELS[data.decision] : null;
   const meetingDate = data ? formatArabicDate(data.meetingDate) : null;
@@ -26,23 +37,50 @@ export default async function Home() {
       style={{
         minHeight: "100vh",
         display: "flex",
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         padding: "6vw",
       }}
     >
+      {/* شريط علوي: الساعة الحية + عداد الزوار */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          width: "100%",
+          maxWidth: 780,
+          marginBottom: "2rem",
+        }}
+      >
+        <LiveClock />
+        <div style={{ textAlign: "left", fontSize: 12, color: "#7A8291" }}>
+          <div style={{ fontFamily: "'Markazi Text', serif", fontSize: 20, color: "#C9CFD9" }}>
+            {formatVisits(visits)}
+          </div>
+          <div>زيارة للموقع</div>
+        </div>
+      </div>
+
       <div style={{ maxWidth: 780, textAlign: "center" }}>
         {data ? (
           <>
-            <div style={{ fontSize: 14, color: "#B8974D", marginBottom: "2.2rem" }}>
+            <div style={{ fontSize: 14, color: "#B8974D", marginBottom: "1rem" }}>
               توقع اجتماع لجنة الفيدرالي — {meetingDate}
             </div>
+
+            <Countdown targetDate={data.meetingDate} />
+
+            <Gauge decision={data.decision} />
+
             <div
               style={{
                 fontFamily: "'Markazi Text', serif",
                 fontWeight: 700,
                 fontSize: "clamp(28px, 5vw, 46px)",
                 lineHeight: 1.55,
+                marginTop: "1.2rem",
               }}
             >
               من المتوقع أن {decisionText} الاحتياطي الفيدرالي الأمريكي.
