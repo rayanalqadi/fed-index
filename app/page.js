@@ -48,9 +48,42 @@ export default async function Home() {
               من المتوقع أن {decisionText} الاحتياطي الفيدرالي الأمريكي.
             </div>
             <div style={{ width: 64, height: 2, background: "#B8974D", margin: "2.4rem auto" }} />
-            <div style={{ marginTop: "3rem", fontSize: 12, color: "#5E6675", lineHeight: 1.8 }}>
-              مبني على أحدث بيانات رسمية متاحة حتى {dataAsOf}، عبر نموذج داخلي بدقة ~90% على
-              البيانات التاريخية.
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                gap: "2.4rem",
+                flexWrap: "wrap",
+                margin: "1.8rem 0",
+              }}
+            >
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontFamily: "'Markazi Text', serif", fontWeight: 700, fontSize: 26, color: "#B8974D" }}>
+                  90.2%
+                </div>
+                <div style={{ fontSize: 11, color: "#7A8291" }}>دقة النموذج تاريخيًا</div>
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontFamily: "'Markazi Text', serif", fontWeight: 700, fontSize: 26, color: "#B8974D" }}>
+                  51
+                </div>
+                <div style={{ fontSize: 11, color: "#7A8291" }}>اجتماعًا اختُبر عليها النموذج</div>
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontFamily: "'Markazi Text', serif", fontWeight: 700, fontSize: 26, color: "#B8974D" }}>
+                  2019–2026
+                </div>
+                <div style={{ fontSize: 11, color: "#7A8291" }}>نطاق البيانات التاريخية</div>
+              </div>
+            </div>
+
+            <div style={{ marginTop: "1.8rem", fontSize: 12, color: "#5E6675", lineHeight: 1.9 }}>
+              يعتمد النموذج على بيانات BLS الرسمية (التضخم Core PCE، البطالة، التوظيف، سعر
+              الفائدة الفعلي) من 2019 حتى 2026 (باستثناء 2020 لتشوه بيانات كورونا)، ويُقارن
+              بأداء "الجمود الساذج" (تكرار آخر قرار) البالغة دقته 80.4% على نفس الفترة.
+              <br />
+              مبني على أحدث بيانات متاحة حتى {dataAsOf}.
               <br />
               نموذج تجريبي لأغراض التعلم — ليس نصيحة استثمارية.
             </div>
